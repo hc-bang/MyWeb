@@ -1,3 +1,3 @@
-#My first git repository
+#My Web
 
-[Capture] (./capture.html, "capture.html")
+Capture <./capture.html>
