@@ -1,3 +1,3 @@
 #My Web
 
-Capture <./capture.html>
+<https://hc-bang.github.io/MyWeb/capture.html>
