@@ -1,0 +1,393 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset="euc-kr">
+<title>Lotto</title>
+<script language="JavaScript" type="text/JavaScript">
+	
+ function LottoSelect(SelectNo)
+ {
+  f = document.global_form;
+  
+  if(eval("f.LottoChecked_"+SelectNo+".value==0")) {
+   if(f.LottoCount.value >= 6) {
+    alert("로또 번호 선택은 6개만 가능합니다.");
+    return;
+   } else {
+    eval("f.LottoNo_"+SelectNo+".src='imgs/s01.gif'");
+    eval("f.LottoChecked_"+SelectNo+".value=1")
+    if(f.LottoCount.value!="") {
+     f.LottoCount.value = parseInt(f.LottoCount.value) + 1;
+    } else {
+     f.LottoCount.value = 1
+    }
+   }
+  } else {
+   eval("f.LottoNo_"+SelectNo+".src='imgs/NO_"+SelectNo+".gif'");
+   eval("f.LottoChecked_"+SelectNo+".value=0")
+   f.LottoCount.value = f.LottoCount.value - 1;
+  }
+   
+  var LottoValue = "";
+  var LottoArry  = "";
+   
+  for(i=1;i<=45;i++)
+  {
+   if(i<10)
+    LottoValue = "0"+i;
+   else
+    LottoValue = i;
+   if(eval("f.LottoChecked_"+LottoValue+".value==1")) {
+    if(!LottoArry)
+     LottoArry = String(LottoValue);
+    else
+     LottoArry = LottoArry+","+String(LottoValue);
+   }
+  }
+  LottoArry = LottoArry.split(",");
+  for(j=0;j<LottoArry.length;j++)
+  {
+   if (LottoArry.length == 1 && LottoArry[j] == "") {
+    eval("f.UserLottoNo1.src='imgs/empty.gif'");
+   }
+   
+   eval("f.LottoNumber"+(j+1)+".value="+LottoArry[j]);
+   if(j!=5) {
+    eval("f.LottoNumber"+(j+2)+".value=''");
+    eval("f.UserLottoNo"+(j+2)+".src='imgs/empty.gif'");
+   }
+   eval("f.UserLottoNo"+(j+1)+".src='imgs/NO_"+LottoArry[j]+".gif'");
+  }
+ }
+	
+	function AutoLottoNumber(LottoArry) 
+	{
+		f = document.global_form;
+		for(i=1;i<=45;i++)
+		{
+			if(i<10) {
+				EmptyNo = "0"+i;
+			} else {
+				EmptyNo = i
+			}
+			eval("f.LottoChecked_"+EmptyNo+".value=0");
+			eval("f.LottoNo_"+EmptyNo+".src='imgs/NO_"+EmptyNo+".gif'");
+		}
+		
+		for(j=0;j<LottoArry.length;j++)
+		{
+			eval("f.LottoNumber"+(j+1)+".value="+LottoArry[j]);
+			if(j!=5) {
+				eval("f.LottoNumber"+(j+2)+".value=''");
+				eval("f.UserLottoNo"+(j+2)+".src='imgs/empty.gif'");
+			}
+		
+			if(LottoArry[j]<10)
+				LottoTenChk = "0"+LottoArry[j];
+			else
+				LottoTenChk = LottoArry[j];
+				
+			eval("f.UserLottoNo"+(j+1)+".src='imgs/NO_"+LottoTenChk+".gif'");
+			eval("f.LottoNo_"+LottoTenChk+".src='imgs/s01.gif'");
+			f.LottoCount.value = 6
+			eval("f.LottoChecked_"+LottoTenChk+".value=1")
+		}
+	}
+	
+	function LottoEntry()
+	{
+		f = document.global_form;
+		if(f.LottoCount.value!=6) {
+			alert("로또번호 6개를 선택하여 주세요.");
+			return;
+		}
+		f.actype.value="lotto_insert";
+		f.action="./lotto_function.php";
+		f.submit();
+	}
+	
+	function Lotto()
+	{
+		LottoArry = "";
+		LottoCount = 0;
+		while(1)
+		{
+			Num = Math.ceil(Math.random() * 45);
+			if(LottoArry.indexOf(Num) == -1)
+			{
+				if(LottoArry)
+					LottoArry = LottoArry+","+String(Num);
+				else
+					LottoArry = String(Num);
+				LottoCount++;
+			}
+							
+			if(LottoCount == 6) {
+				break;
+			}
+		}
+		LottoArry = LottoArry.split(",");
+		LottoArry.sort(NumberOrder);
+		AutoLottoNumber(LottoArry);
+		//alert(LottoArry);
+	}
+					
+	function NumberOrder(A,B)
+	{
+		return A - B;
+	}
+
+	function LottoReset(ItemNo)
+	{
+		location.href="./lotto_sign.htm?ItemNo="+ItemNo;
+		return;
+	}
+	
+</script>
+	
+</script>
+</head>
+<body>
+
+	<form method="post" name="global_form" style="margin:0;">
+	<input type="hidden" name="actype"			 value="" size='3'>
+	<input type="hidden" name="LottoCount"   value="" size='3'>
+	<input type="hidden" name="LottoNumber1" value="" size='3'>
+	<input type="hidden" name="LottoNumber2" value="" size='3'>
+	<input type="hidden" name="LottoNumber3" value="" size='3'>
+	<input type="hidden" name="LottoNumber4" value="" size='3'>
+	<input type="hidden" name="LottoNumber5" value="" size='3'>
+	<input type="hidden" name="LottoNumber6" value="" size='3'>
+	<input type="hidden" name="ItemNo" 			 value="389" size='3'>
+	<input type="hidden" name="MemberID"     value="vader" size='3'>
+	
+	<table width="320" height="500" border="0" cellpadding="0" cellspacing="0" background="imgs/cozLottoBg.gif">
+		<tr><td height="40"><img src="imgs/cozLottoTit.gif" width="320" height="40"></td></tr>
+		<tr>
+			<td height="373" valign="top">
+			<table width="320" height="373" border="0" cellpadding="0" cellspacing="0">
+				<tr>
+					<td rowspan="2" align="center">
+					<table  border="0" cellspacing="0" cellpadding="8">
+						<tr align="center">
+							<!--<td><img src="imgs/s01.gif" width="19" height="34"></td>-->
+							<td>
+								<img src='imgs/NO_01.gif' width="19" height="34" border='0' name='LottoNo_01' onclick="Javascript:LottoSelect('01');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_01' value=''>
+							</td>
+							<td>
+								<img src='imgs/NO_02.gif' width="19" height="34" border='0' name='LottoNo_02' onclick="Javascript:LottoSelect('02');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_02' value=''>
+							</td>
+							<td>
+								<img src='imgs/NO_03.gif' width="19" height="34" border='0' name='LottoNo_03' onclick="Javascript:LottoSelect('03');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_03' value=''>
+							</td>
+							<td>
+								<img src='imgs/NO_04.gif' width="19" height="34" border='0' name='LottoNo_04' onclick="Javascript:LottoSelect('04');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_04' value=''>
+							</td>
+							<td>
+								<img src='imgs/NO_05.gif' width="19" height="34" border='0' name='LottoNo_05' onclick="Javascript:LottoSelect('05');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_05' value=''>
+							</td>
+							<td>
+								<img src='imgs/NO_06.gif' width="19" height="34" border='0' name='LottoNo_06' onclick="Javascript:LottoSelect('06');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_06' value=''>
+							</td>
+							<td>
+								<img src='imgs/NO_07.gif' width="19" height="34" border='0' name='LottoNo_07' onclick="Javascript:LottoSelect('07');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_07' value=''>
+							</td>
+</tr><tr align='center'>							<td>
+								<img src='imgs/NO_08.gif' width="19" height="34" border='0' name='LottoNo_08' onclick="Javascript:LottoSelect('08');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_08' value=''>
+							</td>
+							<td>
+								<img src='imgs/NO_09.gif' width="19" height="34" border='0' name='LottoNo_09' onclick="Javascript:LottoSelect('09');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_09' value=''>
+							</td>
+							<td>
+								<img src='imgs/NO_10.gif' width="19" height="34" border='0' name='LottoNo_10' onclick="Javascript:LottoSelect('10');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_10' value=''>
+							</td>
+							<td>
+								<img src='imgs/NO_11.gif' width="19" height="34" border='0' name='LottoNo_11' onclick="Javascript:LottoSelect('11');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_11' value=''>
+							</td>
+							<td>
+								<img src='imgs/NO_12.gif' width="19" height="34" border='0' name='LottoNo_12' onclick="Javascript:LottoSelect('12');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_12' value=''>
+							</td>
+							<td>
+								<img src='imgs/NO_13.gif' width="19" height="34" border='0' name='LottoNo_13' onclick="Javascript:LottoSelect('13');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_13' value=''>
+							</td>
+							<td>
+								<img src='imgs/NO_14.gif' width="19" height="34" border='0' name='LottoNo_14' onclick="Javascript:LottoSelect('14');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_14' value=''>
+							</td>
+</tr><tr align='center'>							<td>
+								<img src='imgs/NO_15.gif' width="19" height="34" border='0' name='LottoNo_15' onclick="Javascript:LottoSelect('15');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_15' value=''>
+							</td>
+							<td>
+								<img src='imgs/NO_16.gif' width="19" height="34" border='0' name='LottoNo_16' onclick="Javascript:LottoSelect('16');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_16' value=''>
+							</td>
+							<td>
+								<img src='imgs/NO_17.gif' width="19" height="34" border='0' name='LottoNo_17' onclick="Javascript:LottoSelect('17');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_17' value=''>
+							</td>
+							<td>
+								<img src='imgs/NO_18.gif' width="19" height="34" border='0' name='LottoNo_18' onclick="Javascript:LottoSelect('18');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_18' value=''>
+							</td>
+							<td>
+								<img src='imgs/NO_19.gif' width="19" height="34" border='0' name='LottoNo_19' onclick="Javascript:LottoSelect('19');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_19' value=''>
+							</td>
+							<td>
+								<img src='imgs/NO_20.gif' width="19" height="34" border='0' name='LottoNo_20' onclick="Javascript:LottoSelect('20');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_20' value=''>
+							</td>
+							<td>
+								<img src='imgs/NO_21.gif' width="19" height="34" border='0' name='LottoNo_21' onclick="Javascript:LottoSelect('21');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_21' value=''>
+							</td>
+</tr><tr align='center'>							<td>
+								<img src='imgs/NO_22.gif' width="19" height="34" border='0' name='LottoNo_22' onclick="Javascript:LottoSelect('22');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_22' value=''>
+							</td>
+							<td>
+								<img src='imgs/NO_23.gif' width="19" height="34" border='0' name='LottoNo_23' onclick="Javascript:LottoSelect('23');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_23' value=''>
+							</td>
+							<td>
+								<img src='imgs/NO_24.gif' width="19" height="34" border='0' name='LottoNo_24' onclick="Javascript:LottoSelect('24');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_24' value=''>
+							</td>
+							<td>
+								<img src='imgs/NO_25.gif' width="19" height="34" border='0' name='LottoNo_25' onclick="Javascript:LottoSelect('25');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_25' value=''>
+							</td>
+							<td>
+								<img src='imgs/NO_26.gif' width="19" height="34" border='0' name='LottoNo_26' onclick="Javascript:LottoSelect('26');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_26' value=''>
+							</td>
+							<td>
+								<img src='imgs/NO_27.gif' width="19" height="34" border='0' name='LottoNo_27' onclick="Javascript:LottoSelect('27');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_27' value=''>
+							</td>
+							<td>
+								<img src='imgs/NO_28.gif' width="19" height="34" border='0' name='LottoNo_28' onclick="Javascript:LottoSelect('28');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_28' value=''>
+							</td>
+</tr><tr align='center'>							<td>
+								<img src='imgs/NO_29.gif' width="19" height="34" border='0' name='LottoNo_29' onclick="Javascript:LottoSelect('29');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_29' value=''>
+							</td>
+							<td>
+								<img src='imgs/NO_30.gif' width="19" height="34" border='0' name='LottoNo_30' onclick="Javascript:LottoSelect('30');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_30' value=''>
+							</td>
+							<td>
+								<img src='imgs/NO_31.gif' width="19" height="34" border='0' name='LottoNo_31' onclick="Javascript:LottoSelect('31');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_31' value=''>
+							</td>
+							<td>
+								<img src='imgs/NO_32.gif' width="19" height="34" border='0' name='LottoNo_32' onclick="Javascript:LottoSelect('32');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_32' value=''>
+							</td>
+							<td>
+								<img src='imgs/NO_33.gif' width="19" height="34" border='0' name='LottoNo_33' onclick="Javascript:LottoSelect('33');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_33' value=''>
+							</td>
+							<td>
+								<img src='imgs/NO_34.gif' width="19" height="34" border='0' name='LottoNo_34' onclick="Javascript:LottoSelect('34');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_34' value=''>
+							</td>
+							<td>
+								<img src='imgs/NO_35.gif' width="19" height="34" border='0' name='LottoNo_35' onclick="Javascript:LottoSelect('35');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_35' value=''>
+							</td>
+</tr><tr align='center'>							<td>
+								<img src='imgs/NO_36.gif' width="19" height="34" border='0' name='LottoNo_36' onclick="Javascript:LottoSelect('36');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_36' value=''>
+							</td>
+							<td>
+								<img src='imgs/NO_37.gif' width="19" height="34" border='0' name='LottoNo_37' onclick="Javascript:LottoSelect('37');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_37' value=''>
+							</td>
+							<td>
+								<img src='imgs/NO_38.gif' width="19" height="34" border='0' name='LottoNo_38' onclick="Javascript:LottoSelect('38');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_38' value=''>
+							</td>
+							<td>
+								<img src='imgs/NO_39.gif' width="19" height="34" border='0' name='LottoNo_39' onclick="Javascript:LottoSelect('39');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_39' value=''>
+							</td>
+							<td>
+								<img src='imgs/NO_40.gif' width="19" height="34" border='0' name='LottoNo_40' onclick="Javascript:LottoSelect('40');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_40' value=''>
+							</td>
+							<td>
+								<img src='imgs/NO_41.gif' width="19" height="34" border='0' name='LottoNo_41' onclick="Javascript:LottoSelect('41');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_41' value=''>
+							</td>
+							<td>
+								<img src='imgs/NO_42.gif' width="19" height="34" border='0' name='LottoNo_42' onclick="Javascript:LottoSelect('42');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_42' value=''>
+							</td>
+</tr><tr align='center'>							<td>
+								<img src='imgs/NO_43.gif' width="19" height="34" border='0' name='LottoNo_43' onclick="Javascript:LottoSelect('43');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_43' value=''>
+							</td>
+							<td>
+								<img src='imgs/NO_44.gif' width="19" height="34" border='0' name='LottoNo_44' onclick="Javascript:LottoSelect('44');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_44' value=''>
+							</td>
+							<td>
+								<img src='imgs/NO_45.gif' width="19" height="34" border='0' name='LottoNo_45' onclick="Javascript:LottoSelect('45');" style="cursor:hand">
+								<input type="hidden" name='LottoChecked_45' value=''>
+							</td>
+						</tr>
+					</table>
+					</td>
+					<td width="53" height="279" valign="top"><img src="imgs/cozLottoRight.gif" width="53" height="279"></td>
+				</tr>
+				<tr>
+					<td align="center">
+					<table  border="0" cellspacing="0" cellpadding="5">
+						<tr><td align="center"><a href="javascript:Lotto();"><img src="imgs/auto_check.gif" width="32" height="32" border="0"></a></td></tr>
+						<!--tr><td align="center"><a href="javascript:LottoReset('389');"><img src="imgs/cancel_check.gif" width="32" height="32" border="0"></a></td></tr-->
+					</table>
+					</td>
+				</tr>
+			</table>
+			</td>
+		</tr>
+		<tr>
+			<td height="87" align="center" valign="top" background="imgs/cozLottoBbg.gif">
+			<table width="320"  border="0" cellpadding="0" cellspacing="0">
+				<tr><td height="25" colspan="2">&nbsp;</td></tr>
+				<tr>
+					<td width="252" height="55" align="center">
+					<table  border="0" cellspacing="0" cellpadding="8">
+						<tr height="25">
+							<td align="center"><img src="imgs/empty.gif" width="19" height="34" name='UserLottoNo1'></td>
+							<td align="center"><img src="imgs/empty.gif" width="19" height="34" name='UserLottoNo2'></td>
+							<td align="center"><img src="imgs/empty.gif" width="19" height="34" name='UserLottoNo3'></td>
+							<td align="center"><img src="imgs/empty.gif" width="19" height="34" name='UserLottoNo4'></td>
+							<td align="center"><img src="imgs/empty.gif" width="19" height="34" name='UserLottoNo5'></td>
+							<td align="center"><img src="imgs/empty.gif" width="19" height="34" name='UserLottoNo6'></td>
+						</tr>
+					</table>
+					</td>
+					<td width="68" align="center"><!--<a href="JavaScript:LottoEntry()"><img src="imgs/sign.gif" width="51" height="51" border="0"></a>--></td>
+				</tr>
+			</table>
+			</td>
+		</tr>
+	</table>
+</body>
+</html>
