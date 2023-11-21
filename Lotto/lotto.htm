@@ -1,4 +1,4 @@
-<html>
+<html lang="ko">
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset="euc-kr">
 <title>Lotto</title>
@@ -10,7 +10,7 @@
   
   if(eval("f.LottoChecked_"+SelectNo+".value==0")) {
    if(f.LottoCount.value >= 6) {
-    alert("·Î¶Ç ¹øÈ£ ¼±ÅÃÀº 6°³¸¸ °¡´ÉÇÕ´Ï´Ù.");
+    alert("ë¡œë˜ ë²ˆí˜¸ ì„ íƒì€ 6ê°œë§Œ ê°€ëŠ¥í•©ë‹ˆë‹¤.");
     return;
    } else {
     eval("f.LottoNo_"+SelectNo+".src='imgs/s01.gif'");
@@ -97,7 +97,7 @@
 	{
 		f = document.global_form;
 		if(f.LottoCount.value!=6) {
-			alert("·Î¶Ç¹øÈ£ 6°³¸¦ ¼±ÅÃÇÏ¿© ÁÖ¼¼¿ä.");
+			alert("ë¡œë˜ë²ˆí˜¸ 6ê°œë¥¼ ì„ íƒí•˜ì—¬ ì£¼ì„¸ìš”.");
 			return;
 		}
 		f.actype.value="lotto_insert";
